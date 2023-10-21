@@ -29,7 +29,7 @@ def sorting(bds):
     bounds = bds
     y0, x0 = bounds[0]
     y, x = bounds[1]
-    sorted = []
+    sorted = [bounds[1]]
     while (y!=y0 or x !=x0):
         bounds.pop(bounds.index((y, x)))  
         if (y, x+1) in bounds:
@@ -85,8 +85,9 @@ def point(p1, p2):
 
 def chain(bounds):
     d = []
-    for i in range(1, len(bounds)-1):
+    for i in range(0, len(bounds)-1):
         d.append(point(bounds[i], bounds[i+1]))
+    d.append(point(bounds[-1], bounds[0]))
     return d
         
 
@@ -94,9 +95,10 @@ img = np.load("similar.npy")
 # img = np.zeros((10, 10))
 # img[2:5, 2:5]=1
 labeled = label(img)
-for i in range(1, np.max(labeled)):
+for i in range(1, np.max(labeled)+1):
     sorted = sorting(get_boundaries(labeled, i))
-    print(get_boundaries(labeled, i))
+    # print(get_boundaries(labeled, i))
+    # print(sorting(get_boundaries(labeled, i)))
     print(f'Фигура: {i}, последовательность {chain(sorted)}')
 plt.imshow(labeled)
 plt.show()
